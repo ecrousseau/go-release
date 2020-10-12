@@ -2,7 +2,7 @@
 
 set -e
 
-
+cat $GITHUB_EVENT_PATH | jq
 RELEASE_ID=$(cat $GITHUB_EVENT_PATH | jq -r .release.id)
 RELEASE_TAG_NAME=$(cat $GITHUB_EVENT_PATH | jq -r .release.tag_name)
 UPLOAD_URL="https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets"
@@ -28,14 +28,26 @@ for GOOS in $GOOSES; do
       tar cvfz $ARCHIVE_NAME $EXECUTABLE_NAME
     fi
     CHECKSUM=$(md5sum $ARCHIVE_NAME | cut -d ' ' -f 1)
+    if test $GOOS = "windows"; then
+      curl \
+        -X POST \
+        -H "Accept: application/vnd.github.v3+json" \
+        --data-binary @$ARCHIVE_NAME \
+        -H 'Content-Type: application/zip' \
+        -H "Authorization: Bearer $GITHUB_TOKEN" \
+        "$UPLOAD_URL?name=$ARCHIVE_NAME"
+    else
+      curl \
+        -X POST \
+        -H "Accept: application/vnd.github.v3+json" \
+        --data-binary @$ARCHIVE_NAME \
+        -H 'Content-Type: application/gzip' \
+        -H "Authorization: Bearer $GITHUB_TOKEN" \
+        "$UPLOAD_URL?name=$ARCHIVE_NAME"
+    fi
     curl \
       -X POST \
-      --data-binary @$ARCHIVE_NAME \
-      -H 'Content-Type: application/gzip' \
-      -H "Authorization: Bearer $GITHUB_TOKEN" \
-      "$UPLOAD_URL?name=$ARCHIVE_NAME"
-    curl \
-      -X POST \
+      -H "Accept: application/vnd.github.v3+json" \
       --data $CHECKSUM \
       -H 'Content-Type: text/plain' \
       -H "Authorization: Bearer $GITHUB_TOKEN" \
