@@ -1,10 +1,6 @@
 name: go-release
-description: Build static-linked Go executables
+description: Build static-linked Go executables for the module in GITHUB_WORKSPACE
 inputs:
-  path:
-    description: Path to the application being built under GITHUB_WORKSPACE
-    required: false
-    default: ''
   github-token:
     description: Value of GITHUB_TOKEN or equivalent API token
     required: true
@@ -12,7 +8,5 @@ outputs: {}
 runs:
   using: docker
   image: Dockerfile
-  args:
-  - ${{ inputs.path }}
   env:
     GITHUB_TOKEN: ${{ inputs.github-token }}
