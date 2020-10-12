@@ -5,9 +5,14 @@ inputs:
     description: Path to the application being built under GITHUB_WORKSPACE
     required: false
     default: ''
+  github-token:
+    description: Value of GITHUB_TOKEN or equivalent API token
+    required: true
 outputs: {}
 runs:
   using: docker
   image: Dockerfile
   args:
   - ${{ inputs.path }}
+  env:
+    GITHUB_TOKEN: ${{ inputs.github-token }}
