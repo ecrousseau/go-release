@@ -15,7 +15,7 @@ for GOOS in $GOOSES; do
   for GOARCH in $GOARCHES; do
     export GOOS
     export GOARCH
-    if [[ $GOOS == "windows" ]]; then $EXECUTABLE_NAME="$EXECUTABLE_NAME.exe"; fi
+    if [ $GOOS == "windows" ]; then $EXECUTABLE_NAME="$EXECUTABLE_NAME.exe"; fi
     go get
     go build -o $EXECUTABLE_NAME -tags osusergo,netgo
     NAME="${EXECUTABLE_NAME}_${RELEASE_TAG_NAME}_${GOOS}_${GOARCH}"
