@@ -1,0 +1,13 @@
+name: go-release
+description: Build static-linked Go executables
+inputs:
+  path:
+    description: Path to the application being built under GITHUB_WORKSPACE
+    required: false
+    default: ''
+outputs: {}
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+  - ${{ inputs.path }}
