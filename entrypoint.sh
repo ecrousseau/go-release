@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -e
+env
 
 cat $GITHUB_EVENT_PATH | jq .
 RELEASE_ID=$(cat $GITHUB_EVENT_PATH | jq -r .release.id)
