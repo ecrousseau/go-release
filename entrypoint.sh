@@ -2,7 +2,7 @@
 
 set -e
 
-cat $GITHUB_EVENT_PATH | jq
+cat $GITHUB_EVENT_PATH | jq .
 RELEASE_ID=$(cat $GITHUB_EVENT_PATH | jq -r .release.id)
 RELEASE_TAG_NAME=$(cat $GITHUB_EVENT_PATH | jq -r .release.tag_name)
 UPLOAD_URL="https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets"
